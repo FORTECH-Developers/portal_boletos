@@ -944,61 +944,56 @@ License: For each use you must have a valid license purchased only from above li
 
 								<!-- Tabela de Boletos -->
 								<div class="card-body">
-									<h3>Boletos</h3>
-									<table class="table align-middle table-row-dashed fs-6 gy-3" id="kt_table_widget_5_table">
-										<thead>
-											<tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-												<th class="min-w-150px">Código Associado</th>
-												<th class="text-end pe-3 min-w-100px">Data Emissão</th>
-												<th class="text-end pe-3 min-w-100px">Data Vencimento</th>
-												<th class="text-end pe-3 min-w-100px">Valor</th>
-												<th class="text-end pe-3 min-w-100px">Status</th>
-												<th class="text-end pe-0 min-w-75px">Ação</th>
-											</tr>
-										</thead>
-										<tbody class="fw-bold text-gray-600">
-											@foreach($boletos as $boleto)
-											<tr>
-												<!-- Código do Associado -->
-												<td>{{ $boleto->codigo_associado }}</td>
+    <h3>Boletos</h3>
+    <table class="table align-middle table-row-dashed fs-6 gy-3" id="kt_table_widget_5_table">
+        <thead>
+            <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                <th class="min-w-150px">Código Associado</th>
+                <th class="text-end pe-3 min-w-100px">Data Emissão</th>
+                <th class="text-end pe-3 min-w-100px">Data Vencimento</th>
+                <th class="text-end pe-3 min-w-100px">Valor</th>
+                <th class="text-end pe-3 min-w-100px">Status</th>
+                <th class="text-end pe-0 min-w-75px">Ação</th>
+            </tr>
+        </thead>
+        <tbody class="fw-bold text-gray-600">
+            @foreach($boletos as $boleto)
+                <tr>
+                    <!-- Código do Associado -->
+                    <td>{{ $boleto->codigo_associado }}</td>
 
-												<!-- Data de Emissão -->
-												<td class="text-end">{{ \Carbon\Carbon::parse($boleto->data_emissao)->format('d M, Y') }}</td>
+                    <!-- Data de Emissão -->
+                    <td class="text-end">{{ \Carbon\Carbon::parse($boleto->data_emissao)->format('d M, Y') }}</td>
 
-												<!-- Data de Vencimento -->
-												<td class="text-end">{{ \Carbon\Carbon::parse($boleto->data_vencimento)->format('d M, Y') }}</td>
+                    <!-- Data de Vencimento -->
+                    <td class="text-end">{{ \Carbon\Carbon::parse($boleto->data_vencimento)->format('d M, Y') }}</td>
 
-												<!-- Valor -->
-												<td class="text-end">R$ {{ number_format($boleto->valor, 2, ',', '.') }}</td>
+                    <!-- Valor -->
+                    <td class="text-end">R$ {{ number_format($boleto->valor, 2, ',', '.') }}</td>
 
-												<!-- Status -->
-												<td class="text-end">
-													@if($boleto->status == 'Pago')
-													<span class="badge py-3 px-4 fs-7 badge-light-success">Pago</span>
-													@else
-													<span class="badge py-3 px-4 fs-7 badge-light-danger">Pendente</span>
-													@endif
-												</td>
+                    <!-- Status -->
+                    <td class="text-end">
+                        @if($boleto->status == 'Pago')
+                            <span class="badge py-3 px-4 fs-7 badge-light-success">Pago</span>
+                        @else
+                            <span class="badge py-3 px-4 fs-7 badge-light-danger">Pendente</span>
+                        @endif
+                    </td>
 
-												@php
-												$hoje = Carbon::now();
-												$dataVencimento = Carbon::parse($boleto->data_vencimento);
-												$diasParaVencimento = $dataVencimento->diffInDays($hoje, false);
-												@endphp
+                    <!-- Ação: Link para download -->
+                    <td class="text-end">
+                        @if($boleto->pode_baixar)
+                            <a href="{{ $boleto->link_download }}" class="btn btn-primary">Baixar</a>
+                        @else
+                            <span class="text-muted">Não disponível</span>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 
-												<!-- Ação: Link para download -->
-												<td class="text-end">
-													@if($diasParaVencimento <= 7 && $diasParaVencimento>= 0)
-														<a href="{{ $boleto->link_download }}" class="btn btn-primary">Baixar</a>
-														@else
-														<span class="text-muted">Não disponível</span>
-														@endif
-												</td>
-											</tr>
-											@endforeach
-										</tbody>
-									</table>
-								</div>
 
 								<!--end::Content wrapper-->
 								<!--begin::Footer-->
